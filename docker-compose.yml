@@ -1,0 +1,100 @@
+version: "3.9"
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - 27018:27017
+    volumes:
+      - ./backend/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  # mongo-express:
+  #   image: mongo-express
+  #   container_name: mongo-express
+  #   restart: always
+  #   ports:
+  #     - 8081:8081
+  #   environment:
+  #     ME_CONFIG_MONGODB_URL: mongodb://mongodb/
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.13-management-alpine
+    restart: always
+    ports:
+      # AMQP protocol port
+      - 5672:5672
+      # Management UI
+      - 15672:15672
+
+  gateway:
+    image: hoanglonguit2003/nginx-ms:stable
+    container_name: gateway
+    ports:
+      - 8000:80
+    restart: always
+    depends_on:
+      - "customer"
+      - "products"
+      - "shopping"
+    environment:
+      - PRODUCTS_URL=http://products:8000
+      - SHOPPING_URL=http://shopping:8000
+      - CUSTOMER_URL=http://customer:8000
+  # gateway:
+  #   image: hoanglonguit2003/gateway-ms:stable
+  #   container_name: gateway
+  #   ports:
+  #     - 8000:8000
+  #   restart: always
+  #   depends_on:
+  #     - "customer"
+  #     - "products"
+  #     - "shopping"
+  #   env_file:
+  #     - ./backend/gateway/.env
+
+  products:
+    image: hoanglonguit2003/products-ms:stable
+    container_name: products
+    restart: always
+    depends_on:
+      - "mongodb"
+      - "rabbitmq"
+    env_file:
+      - ./backend/products/.env
+
+  shopping:
+    image: hoanglonguit2003/shopping-ms:stable
+    container_name: shopping
+    restart: always
+    depends_on:
+      - "mongodb"
+      - "rabbitmq"
+
+    env_file:
+      - ./backend/shopping/.env
+  customer:
+    image: hoanglonguit2003/customer-ms:stable
+    container_name: customer
+    restart: always
+    depends_on:
+      - "mongodb"
+      - "rabbitmq"
+
+    env_file:
+      - ./backend/customer/.env
+
+  frontend:
+    image: hoanglonguit2003/frontend-ms
+    container_name: frontend
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      - "gateway"
+    environment:
+      - API_URL=http://gateway
+# docker compose up -d mongodb rabbitmq products shopping customer gateway
