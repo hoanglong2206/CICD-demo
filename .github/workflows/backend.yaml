@@ -10,10 +10,12 @@ on:
 
 jobs:
   build:
+    defaults:
+      run:
+        working-directory: ./backend
     strategy:
       matrix:
         service: [customer, products, shopping]
-        node-version: [18.x, 20.x]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,13 +24,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
+          cache: "npm"
 
       - name: Install dependencies
-        run: npm install
+        run: cd ${{ matrix.service }} && npm install
 
-      - name: Unit tests
-        run: npm run test
+      - name: Run tests
+        run: cd ${{ matrix.service }} && npm run test
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -45,4 +48,4 @@ jobs:
           context: ./backend/${{ matrix.service }}
           file: ./backend/${{ matrix.service }}/Dockerfile
           push: true
-          tags: hoanglonguit2003/${{ matrix.service }}:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:latest
