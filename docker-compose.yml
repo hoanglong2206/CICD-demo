@@ -43,6 +43,7 @@ services:
       - PRODUCTS_URL=http://products:8000
       - SHOPPING_URL=http://shopping:8000
       - CUSTOMER_URL=http://customer:8000
+
   # gateway:
   #   image: hoanglonguit2003/gateway-ms:stable
   #   container_name: gateway
@@ -57,7 +58,7 @@ services:
   #     - ./backend/gateway/.env
 
   products:
-    image: hoanglonguit2003/products-ms:stable
+    image: hoanglonguit2003/products-ms:test
     container_name: products
     restart: always
     depends_on:
@@ -67,7 +68,7 @@ services:
       - ./backend/products/.env
 
   shopping:
-    image: hoanglonguit2003/shopping-ms:stable
+    image: hoanglonguit2003/shopping-ms:test
     container_name: shopping
     restart: always
     depends_on:
@@ -77,7 +78,7 @@ services:
     env_file:
       - ./backend/shopping/.env
   customer:
-    image: hoanglonguit2003/customer-ms:stable
+    image: hoanglonguit2003/customer-ms:test
     container_name: customer
     restart: always
     depends_on:
