@@ -27,6 +27,16 @@ jobs:
           node-version: 20
           cache: "npm"
 
+      - name: Check for lock file and install dependencies
+        run: |
+          cd ${{ matrix.service }}
+          if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ] || [ -f yarn.lock ]; then
+            npm install
+          else
+            echo "No lock file found. Skipping npm install with cache."
+            npm install --no-cache
+          fi
+
       - name: Install dependencies
         run: cd ${{ matrix.service }} && npm install
 
