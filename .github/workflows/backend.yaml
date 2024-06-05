@@ -35,7 +35,7 @@ jobs:
           args: >
             -Dsonar.projectKey=CICD-demo
             -Dsonar.organization=hoanglong2206
-          projectBaseDir: ${{ matrix.service }}
+          projectBaseDir: "./backend/${{ matrix.service }}"
 
       - name: Install dependencies
         run: cd ${{ matrix.service }} && npm install
