@@ -27,7 +27,7 @@ jobs:
         with:
           directory: ./frontend
           file: ./frontend/Dockerfile
-          framework: docker
+          framework: dockerfile
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
