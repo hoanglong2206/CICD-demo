@@ -27,7 +27,7 @@ jobs:
           node-version: 20
 
       - name: Analyze with SonarCloud
-        uses: sonarsource/sonarcloud-github-action@v2.1.0
+        uses: sonarsource/sonarcloud-github-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
@@ -35,6 +35,7 @@ jobs:
           args: >
             -Dsonar.projectKey=CICD-demo
             -Dsonar.organization=hoanglong2206
+          projectBaseDir: ${{ matrix.service }}
 
       - name: Install dependencies
         run: cd ${{ matrix.service }} && npm install
