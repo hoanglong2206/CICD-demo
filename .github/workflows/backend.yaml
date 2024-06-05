@@ -33,9 +33,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=CICD-demo
             -Dsonar.organization=hoanglong2206
-          projectBaseDir: "./backend/${{ matrix.service }}"
+            -Dsonar.projectKey=hoanglong2206_CICD-demo
 
       - name: Install dependencies
         run: cd ${{ matrix.service }} && npm install
