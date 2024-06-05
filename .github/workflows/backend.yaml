@@ -26,15 +26,15 @@ jobs:
         with:
           node-version: 20
 
-      - name: Check for lock file and install dependencies
-        run: |
-          cd ${{ matrix.service }}
-          if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ] || [ -f yarn.lock ]; then
-            npm install
-          else
-            echo "No lock file found. Skipping npm install with cache."
-            npm install --no-cache
-          fi
+      - name: Analyze with SonarCloud
+        uses: sonarsource/sonarcloud-github-action@v2.1.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=CICD-demo
+            -Dsonar.organization=hoanglong2206
 
       - name: Install dependencies
         run: cd ${{ matrix.service }} && npm install
