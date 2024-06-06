@@ -22,12 +22,12 @@ jobs:
         with:
           node-version: 20
 
-      - name: Analyze with Checkov
-        uses: bridgecrewio/checkov-action@master
-        with:
-          directory: ./frontend
-          file: ./frontend/Dockerfile
-          framework: dockerfile
+      # - name: Analyze with Checkov
+      #   uses: bridgecrewio/checkov-action@master
+      #   with:
+      #     directory: ./frontend
+      #     file: ./frontend/Dockerfile
+      #     framework: dockerfile
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

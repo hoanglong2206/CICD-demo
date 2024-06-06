@@ -28,6 +28,13 @@ jobs:
         with:
           node-version: 20
 
+      - name: Analyze with Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ./backend/${{ matrix.service }}
+          file: ./backend/${{ matrix.service }}/Dockerfile
+          framework: dockerfile
+
       - name: Analyze with SonarCloud
         uses: sonarsource/sonarcloud-github-action@master
         env:
