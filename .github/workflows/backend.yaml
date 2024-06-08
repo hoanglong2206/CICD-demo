@@ -9,6 +9,23 @@ on:
       - main
 
 jobs:
+  scan_sonarqube:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Analyze with SonarCloud
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=hoanglong2206
+            -Dsonar.projectKey=hoanglong2206_CICD-demo
+            -Dsonar.sources=.
   backend-service:
     defaults:
       run:
@@ -27,24 +44,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Analyze with Checkov
-        uses: bridgecrewio/checkov-action@master
-        with:
-          directory: ./backend/${{ matrix.service }}
-          file: ./backend/${{ matrix.service }}/Dockerfile
-          framework: dockerfile
-
-      - name: Analyze with SonarCloud
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-        with:
-          args: >
-            -Dsonar.organization=hoanglong2206
-            -Dsonar.projectKey=hoanglong2206_CICD-demo
-          projectBaseDir: ./backend/${{ matrix.service }}
 
       - name: Install dependencies
         run: cd ${{ matrix.service }} && npm install
