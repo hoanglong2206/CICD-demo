@@ -66,6 +66,7 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:latest
 
   backend-gateway:
+    needs: scan_sonarqube
     defaults:
       run:
         working-directory: ./backend/gateway
