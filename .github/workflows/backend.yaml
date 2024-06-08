@@ -21,11 +21,11 @@ jobs:
         uses: sonarsource/sonarcloud-github-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           args: >
             -Dsonar.organization=hoanglong2206
             -Dsonar.projectKey=hoanglong2206_CICD-demo
-            -Dsonar.sources=.
   backend-service:
     defaults:
       run:
